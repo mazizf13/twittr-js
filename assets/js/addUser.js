@@ -13,26 +13,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const now = new Date();
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate().padStart(2, "0"));
+  const day = String(now.getDate()).padStart(2, "0");
 
   formManager.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const userData = {
       name: userName.value,
-      username: userAvatar.value,
-      avatar: userUsername.value,
+      username: userUsername.value,
+      avatar: userAvatar.value,
       password: userPassword.value,
       createdAt: `${year}-${month}-${day}`,
     };
 
-    const result = userManager.saveuser(userData);
+    const result = userManager.saveUser(userData);
 
     if (result.success) {
       instantFeedback.style.display = "none";
-
-      // arahkan pengguna ke halaman login
-      return (window.location.href = "../login..html");
+      // Redirect the user to the login page
+      return (window.location.href = "../login.html");
     } else {
       instantFeedback.style.display = "flex";
       instantFeedback.textContent = result.error;
