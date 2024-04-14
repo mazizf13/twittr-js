@@ -46,6 +46,22 @@ class User {
         error: "Password is missing",
       };
     }
+
+    if (password.length < 8) {
+      return {
+        success: false,
+        error: "Password at least has a 8 characters",
+      };
+    }
+
+    const newUser = {
+      id: Date.now(),
+      isActive: true,
+      ...userData,
+    };
+
+    const users = this.getUsers();
+    users.push(newUser);
   }
 
   userSignIn() {}
