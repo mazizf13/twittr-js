@@ -75,5 +75,39 @@ class User {
     }
   }
 
-  userSignIn() {}
+  userSignIn(userData) {
+    // Validation process
+    const { username, password } = userData;
+
+    if (typeof username !== "string" || username.trim() === "") {
+      return {
+        success: false,
+        error: "Username is missing",
+      };
+    }
+
+    if (typeof password !== "string" || password.trim() === "") {
+      return {
+        success: false,
+        error: "Password is missing",
+      };
+    }
+
+    const userExists = this.getUsers().some(
+      (user) =>
+        user.username.toLowerCase() === username.toLowerCase() &&
+        user.password === password
+    );
+
+    if (userExists) {
+      return {
+        success: true,
+      };
+    } else {
+      return {
+        success: false,
+        error: "Username or password is missing!",
+      };
+    }
+  }
 }
