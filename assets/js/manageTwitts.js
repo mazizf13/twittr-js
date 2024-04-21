@@ -59,6 +59,8 @@ document.addEventListener("DOMContentLoaded", () => {
       feelingItems.forEach((item) => {
         item.classList.remove("border-[#1880e8]");
       });
+
+      displayAllTwitt(twittManager.getTwitts());
     } else {
       instantFeedback.style.display = "flex";
       instantFeedback.textContent = result.error;
@@ -67,14 +69,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const existingTwitts = twittManager.getTwitts();
 
-  function displayAllTwitt() {
-    if (existingTwitts.length === 0) {
+  function displayAllTwitt(twitts = existingTwitts) {
+    if (twitts.length === 0) {
       console.log("Tidak ada twitts tersedia");
     } else {
       console.log("Tersedia twitts siap digunakan");
       twittsWrapper.innerHTML = "";
 
-      existingTwitts.forEach((twitt) => {
+      twitts.sort((a, b) => b.id - a.id);
+
+      twitts.forEach((twitt) => {
+        const ownerTwitt = twittUsers.find(
+          (user) =>
+            user.username.toLowerCase() ===
+            twitt.twittUsernameOwner.toLowerCase()
+        );
+
         const itemTwitt = document.createElement("div");
         itemTwitt.className = "bg-primary p-4 border-b-2 border-line";
         itemTwitt.id = `twitt-${twitt.id}`;
@@ -82,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start">
                     <img
-                    src="assets/bwa-profile.png"
+                    src="${ownerTwitt.avatar}"
                     alt="search"
                     srcset=""
                     class="object-cover w-[46px] h-[46px] rounded-full"
@@ -90,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="pl-2">
                     <div class="flex gap-1">
                         <p class="text-base font-bold inline-block">
-                        Angga Risky
+                        ${ownerTwitt.name}
                         <img
                             src="assets/verify.png"
                             alt=""
@@ -100,19 +110,19 @@ document.addEventListener("DOMContentLoaded", () => {
                         </p>
                     </div>
                     <p class="text-username text-sm">
-                        @buildwithangga • 5 Mar 2024
+                        @${twitt.twittUsernameOwner} • ${twitt.twiitCreatedAt}
                     </p>
                     </div>
                 </div>
                 <div
                     class="flex justify-center items-center rounded-full px-3 py-1.5 border-line border-2 gap-1.5"
                 >
-                    <p class="text-sm font-semibold">🤩 Happy</p>
+                    <p class="text-sm font-semibold">${twitt.twittFeeling}</p>
                 </div>
                 </div>
 
                 <p class="pl-[55px] py-2.5 leading-7 text-base">
-                Makan mie ayam malam ini enak sekali wuhuuuuuu
+                ${twitt.twittContent}
                 </p>
 
                 <div class="flex justify-between items-center pl-[55px] w-[484px]">
