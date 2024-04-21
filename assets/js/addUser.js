@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const instantFeedback = document.getElementById("instantFeedback");
 
+  instantFeedback.style.display = "none";
+
   const userManager = new User();
 
   // membuat format tanggal "yyyy-mm-dd"
