@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
       twittContent: twittContent.value,
       twittUsernameOwner: usernameLoggedIn,
       twittFeeling: selectedFeeling,
-      twiitCreatedAt: `${year}-${month}-${day}`,
+      twittCreatedAt: `${year}-${month}-${day}`,
     };
 
     const result = twittManager.saveTwitt(twittData);
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         </p>
                     </div>
                     <p class="text-username text-sm">
-                        @${twitt.twittUsernameOwner} • ${twitt.twiitCreatedAt}
+                        @${twitt.twittUsernameOwner} • ${twitt.twittCreatedAt}
                     </p>
                     </div>
                 </div>
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 <div class="flex justify-between items-center pl-[55px] w-[484px]">
                 <div class="flex justify-center items-center gap-2.5 pr-[250px]">
-                    <a
+                    <a id="loveTwitt-${twitt.id}"
                     href="#"
                     class="cursor flex justify-start items-center w-[93px] gap-1.5"
                     >
@@ -152,6 +152,26 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>`;
 
         twittsWrapper.appendChild(itemTwitt);
+
+        // event listener untuk fitur like
+        itemTwitt
+          .querySelector(`#loveTwitt-${twitt.id}`)
+          .addEventListener("click", function (event) {
+            event.preventDefault();
+
+            const loveTwittData = {
+              twittId: twitt.id,
+              userId: usernameLoggedIn,
+            };
+
+            const result = twittManager.loveTwitt(loveTwittData);
+
+            if (result.success) {
+            } else {
+              instantFeedback.style.display = "flex";
+              instantFeedback.textContent = result.error;
+            }
+          });
       });
     }
   }
