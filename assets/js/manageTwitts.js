@@ -91,6 +91,11 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         const countLovetwitts = getAllLoveTwitts.length;
 
+        const hasLiked = twittManager.userHasLikeTwittValidate(
+          twitt.id,
+          usernameLoggedIn
+        );
+
         const itemTwitt = document.createElement("div");
         itemTwitt.className = "bg-primary p-4 border-b-2 border-line";
         itemTwitt.id = `twitt-${twitt.id}`;
@@ -137,7 +142,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     href="#"
                     class="cursor flex justify-start items-center w-[93px] gap-1.5"
                     >
-                    <img class="like-icon" src="assets/heart.svg" alt="heart" />
+                    <img class="like-icon" src="assets/${
+                      hasLiked ? `heart-fill.svg` : `heart.svg`
+                    }" alt="heart" />
                     <p id="totalLikeThatTwitt" class="text-sm font-normal text-like">${countLovetwitts} Likes</p>
                     </a>
                     <a
@@ -163,6 +170,8 @@ document.addEventListener("DOMContentLoaded", () => {
           "#totalLikeThatTwitt"
         );
 
+        const likeIcon = itemTwitt.querySelector(".like-icon");
+
         // event listener untuk fitur like
         itemTwitt
           .querySelector(`#loveTwitt-${twitt.id}`)
@@ -177,7 +186,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const result = twittManager.loveTwitt(loveTwittData);
 
             if (result.success) {
-              totalLikeThatTwitt.textContent = 1;
+              let currentLikes = parseInt(totalLikeThatTwitt.textContent) || 0;
+              totalLikeThatTwitt.textContent = currentLikes + 1 + " Likes";
+              likeIcon.src = "assets/heart-fill.svg";
             } else {
               instantFeedback.style.display = "flex";
               instantFeedback.textContent = result.error;
