@@ -102,65 +102,55 @@ document.addEventListener("DOMContentLoaded", () => {
         itemTwitt.innerHTML = `
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start">
-                    <img
-                    src="${ownerTwitt.avatar}"
-                    alt="search"
-                    srcset=""
-                    class="object-cover w-[46px] h-[46px] rounded-full"
-                    />
+                    <img src="${
+                      ownerTwitt.avatar
+                    }" alt="search" srcset="" class="object-cover w-[46px] h-[46px] rounded-full"/>
                     <div class="pl-2">
-                    <div class="flex gap-1">
-                        <p class="text-base font-bold inline-block">
-                        ${ownerTwitt.name}
-                        <img
-                            src="assets/verify.png"
-                            alt=""
-                            srcset=""
-                            class="inline w-5 h-5 rounded-full"
-                        />
-                        </p>
+                        <div class="flex gap-1">
+                            <p class="text-base font-bold inline-block"> ${
+                              ownerTwitt.name
+                            }
+                                <img src="assets/verify.png" alt="" srcset="" class="inline w-5 h-5 rounded-full"/>
+                            </p>
+                        </div>
+                        <p class="text-username text-sm">@${
+                          twitt.twittUsernameOwner
+                        } • ${twitt.twittCreatedAt}</p>
+                        </div>
                     </div>
-                    <p class="text-username text-sm">
-                        @${twitt.twittUsernameOwner} • ${twitt.twittCreatedAt}
-                    </p>
+
+                    <div class="flex justify-center items-center rounded-full px-3 py-1.5 border-line border-2 gap-1.5">
+                        <p class="text-sm font-semibold">${
+                          twitt.twittFeeling
+                        }</p>
                     </div>
-                </div>
-                <div
-                    class="flex justify-center items-center rounded-full px-3 py-1.5 border-line border-2 gap-1.5"
-                >
-                    <p class="text-sm font-semibold">${twitt.twittFeeling}</p>
-                </div>
                 </div>
 
-                <p class="pl-[55px] py-2.5 leading-7 text-base">
-                ${twitt.twittContent}
-                </p>
+                <p class="pl-[55px] py-2.5 leading-7 text-base">${
+                  twitt.twittContent
+                }</p>
 
                 <div class="flex justify-between items-center pl-[55px] w-[484px]">
-                <div class="flex justify-center items-center gap-2.5 pr-[250px]">
-                    <a id="loveTwitt-${twitt.id}"
-                    href="#"
-                    class="cursor flex justify-start items-center w-[93px] gap-1.5"
-                    >
-                    <img class="like-icon" src="assets/${
-                      hasLiked ? `heart-fill.svg` : `heart.svg`
-                    }" alt="heart" />
-                    <p id="totalLikeThatTwitt" class="text-sm font-normal text-like">${countLovetwitts} Likes</p>
-                    </a>
-                    <a
-                    href="#"
-                    class="cursor flex justify-start items-center w-[93px] gap-1.5"
-                    >
-                    <img src="assets/trash.svg" alt="heart" />
-                    <p class="text-sm font-normal text-username">Delete</p>
-                    </a>
-                    <a
-                    href="#"
-                    class="flex justify-start items-center w-[93px] gap-1.5"
-                    >
-                    <img src="assets/warning-2.svg" alt="warning-2" />
-                    <p class="text-sm font-normal text-username">Report</p>
-                    </a>
+                    <div class="flex justify-center items-center gap-2.5 pr-[250px]">
+                        <a id="loveTwitt-${
+                          twitt.id
+                        }" href="#" class="cursor flex justify-start items-center w-[93px] gap-1.5">
+                            <img class="like-icon" src="assets/${
+                              hasLiked ? `heart-fill.svg` : `heart.svg`
+                            }" alt="heart" />
+                            <p id="totalLikeThatTwitt" class="text-sm font-normal text-like">${countLovetwitts} Likes</p>
+                        </a>
+                    ${
+                      twitt.twittUsernameOwner === usernameLoggedIn
+                        ? `<a id="deleteTwitt-${twitt.id}" href="#" class="cursor flex justify-start items-center w-[93px] gap-1.5">
+                        <img src="assets/trash.svg" alt="delete" />
+                        <p class="text-sm font-normal text-username"></p>
+                    </a>`
+                        : `<a href="#" class="flex justify-start items-center w-[93px] gap-1.5">
+                        <img src="assets/warning-2.svg" alt="warning-2" />
+                        <p class="text-sm font-normal text-username">Report</p>
+                    </a>`
+                    } 
                 </div>
             </div>`;
 
@@ -194,6 +184,24 @@ document.addEventListener("DOMContentLoaded", () => {
               instantFeedback.textContent = result.error;
             }
           });
+
+        const deleteTwittButton = itemTwitt.querySelector(
+          `#deleteTwitt-${twitt.id}`
+        );
+
+        if (deleteTwittButton) {
+          deleteTwittButton.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            const result = twittManager.deleteTwitt(twitt.id);
+            if (result.success) {
+              displayAllTwitt(twittManager.getTwitts());
+            } else {
+              instantFeedback.style.display = "flex";
+              instantFeedback.textContent = result.error;
+            }
+          });
+        }
       });
     }
   }
