@@ -28,8 +28,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const existingTwitts = twittManager.getTwitts();
   const existingLoveTwitts = twittManager.getLoveTwitts();
 
-  function displayAllTwitt(twitts = existingTwitts) {
+  const userProfileTwitts = existingTwitts.filter(
+    (twitt) => twitt.twittUsernameOwner === usernameProfileChosen
+  );
+
+  function displayAllTwitt(twitts = userProfileTwitts) {
     if (twitts.length === 0) {
+      twittsWrapper.innerHTML = "Tidak ada tweets terbaru.";
       console.log("Tidak ada twitts tersedia");
     } else {
       console.log("Tersedia twitts siap digunakan");
@@ -166,7 +171,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const result = twittManager.deleteTwitt(twitt.id);
             if (result.success) {
-              displayAllTwitt(twittManager.getTwitts());
+              displayAllTwitt(
+                twittManager
+                  .getTwitts()
+                  .filter(
+                    (twitt) =>
+                      twitt.twittUsernameOwner === usernameProfileChosen
+                  )
+              );
             } else {
               instantFeedback.style.display = "flex";
               instantFeedback.textContent = result.error;
